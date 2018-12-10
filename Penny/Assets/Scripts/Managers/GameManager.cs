@@ -8,8 +8,14 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get {return instance;}	}
 
 	private NetworkManager networkManager;
+	private MatchManager matchManager;
+	private TurnManager turnManager;
+	private UIManager uIManager;
 
 	public NetworkManager NetworkManager {get {return networkManager;}}
+	public MatchManager MatchManager { get { return matchManager;}}
+	public TurnManager TurnManager { get { return turnManager;}}
+	public UIManager UIManager {get {return uIManager;}}
 
 	private void Awake()
 	{
@@ -23,5 +29,8 @@ public class GameManager : MonoBehaviour
 		}
 
 		networkManager = GetComponent<NetworkManager>();
+		matchManager = GetComponent<MatchManager>();
+		turnManager = GetComponent<TurnManager>();
+		uIManager = GetComponent<UIManager>();
 	}	
 }

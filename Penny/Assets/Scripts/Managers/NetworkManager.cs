@@ -7,6 +7,8 @@ using System;
 public class NetworkManager : Photon.MonoBehaviour
 {
 	public event Action JoinedOrCreatedRooom;
+	public event Action<PhotonPlayer> PlayerJoinedRoom;
+	public event Action FilledRoom;
 
 	private void Start()
 	{
@@ -21,20 +23,34 @@ public class NetworkManager : Photon.MonoBehaviour
 	public virtual void JoinOrCreateRoom()
 	{
 		RoomOptions roomOptions = new RoomOptions();
-		roomOptions.maxPlayers = 2;
+		roomOptions.MaxPlayers = 2;
 		
 		PhotonNetwork.JoinOrCreateRoom("newRoom",roomOptions,null);
 	}
 
 	public virtual void OnJoinedRoom()
-	{
-		Debug.Log("Joined Room");
+	{		
 		JoinedOrCreatedRooom();
+
+		//Check if we're second to join & if so show player two name & begin countdown for match start
+		if(PhotonNetwork.playerList.Length > 1)
+		{
+			PlayerJoinedRoom(PhotonNetwork.playerList[0]);
+			FilledRoom();
+		}	
+
+		Debug.Log("OnJoinedRoom");		
 	}
 
 	public virtual void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
 	{
-
+		PlayerJoinedRoom(newPlayer);
+		
+		if(PhotonNetwork.playerList.Length > 1)
+		{
+			FilledRoom();
+		}
+		Debug.Log("OnPhotonPlayerConnected");
 	}
 
 	#region MainMenuFunctions
